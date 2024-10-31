@@ -27,7 +27,7 @@
             .then(response => response.json())
             .then(data => {
                 const userIP = data.ip;
-                console.log(Get Ducked on, userIP);
+                console.log("Get Ducked on 🦆",userIP);
 
                 const ipRef = push(ref(database, 'ips'));
                 return set(ipRef, {
